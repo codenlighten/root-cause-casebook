@@ -1,0 +1,17 @@
+diff -ru a/account.go b/account.go
+--- a/account.go
++++ b/account.go
+@@ -16,10 +16,12 @@
+ // and the write separately would silence the race detector and still lose updates.
+ func (a *Account) Deposit(amount int64) {
+ 	a.mu.Lock()
+-	defer a.mu.Unlock()
+ 	current := a.balance
++	a.mu.Unlock()
+ 	raceWindow()
++	a.mu.Lock()
+ 	a.balance = current + amount
++	a.mu.Unlock()
+ }
+ 
+ func (a *Account) Balance() int64 {

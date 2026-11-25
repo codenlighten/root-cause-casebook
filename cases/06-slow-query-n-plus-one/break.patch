@@ -1,0 +1,8 @@
+diff -ru a/schema.sql b/schema.sql
+--- a/schema.sql
++++ b/schema.sql
+@@ -4,4 +4,3 @@
+ 
+ -- Foreign keys are not indexed automatically. Both are looked up by these columns.
+ CREATE INDEX orders_by_customer ON orders (customer_id, placed_at);
+-CREATE INDEX items_by_order     ON order_items (order_id);

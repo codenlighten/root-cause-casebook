@@ -1,0 +1,10 @@
+diff -ru a/resolver.py b/resolver.py
+--- a/resolver.py
++++ b/resolver.py
+@@ -20,6 +20,4 @@
+             return self._cache[key]
+         value = self._fetch(user, query)
+         self._cache[key] = value
+-        while len(self._cache) > self.MAX_ENTRIES:
+-            self._cache.popitem(last=False)  # drop the least recently used
+         return value

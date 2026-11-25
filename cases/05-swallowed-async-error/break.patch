@@ -1,0 +1,15 @@
+diff -ru a/notify.ts b/notify.ts
+--- a/notify.ts
++++ b/notify.ts
+@@ -1,7 +1,10 @@
+ export interface NotifyResult { sent: number; failed: { user: string; reason: string }[] }
+ 
+ export async function notifyAll(users: string[], send: (user: string) => Promise<void>): Promise<NotifyResult> {
+-  const outcomes = await Promise.allSettled(users.map((user) => send(user)));
++  const outcomes = users.map((user) => {
++    void send(user); // fire and forget
++    return { status: "fulfilled", value: undefined } as PromiseSettledResult<void>;
++  });
+   const failed: NotifyResult["failed"] = [];
+   outcomes.forEach((outcome, i) => {
+     if (outcome.status === "rejected") {

@@ -1,0 +1,12 @@
+diff -ru a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -2,7 +2,7 @@
+ 
+ /// Total size in bytes of `chunks` chunks of `chunk_size` bytes each.
+ pub fn total_size(chunks: u32, chunk_size: u32) -> u64 {
+-    u64::from(chunks) * u64::from(chunk_size)
++    (chunks * chunk_size) as u64
+ }
+ 
+ #[cfg(test)]

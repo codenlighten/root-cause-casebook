@@ -1,0 +1,12 @@
+diff -ru a/directory.py b/directory.py
+--- a/directory.py
++++ b/directory.py
+@@ -5,7 +5,7 @@
+ def _key(name: str) -> str:
+     # NFC makes "e" + combining accent and the precomposed letter identical.
+     # casefold() is the Unicode-aware comparison form of lower() ("STRASSE" == "straße").
+-    return unicodedata.normalize("NFC", name.strip()).casefold()
++    return name.strip().casefold()
+ 
+ 
+ class Directory:

@@ -1,0 +1,16 @@
+diff -ru a/schedule.py b/schedule.py
+--- a/schedule.py
++++ b/schedule.py
+@@ -1,5 +1,5 @@
+ """Daily reminder scheduling."""
+-from datetime import datetime, timedelta
++from datetime import datetime, timedelta, timezone
+ 
+ 
+ def next_daily(at: datetime) -> datetime:
+@@ -8,4 +8,4 @@
+     "Every day at 09:00" is a wall-clock rule, so the day is added to the local
+     wall time and the zone's UTC offset is looked up again for the result.
+     """
+-    return at + timedelta(days=1)
++    return (at.astimezone(timezone.utc) + timedelta(days=1)).astimezone(at.tzinfo)

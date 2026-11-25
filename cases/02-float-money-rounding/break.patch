@@ -1,0 +1,11 @@
+diff -ru a/invoice.ts b/invoice.ts
+--- a/invoice.ts
++++ b/invoice.ts
+@@ -13,6 +13,6 @@
+   }
+   const subtotal = items.reduce((sum, it) => sum + toCents(it.price) * it.qty, 0);
+   const bps = Math.round(taxRate * 10000);
+-  const tax = Math.floor((subtotal * bps + 5000) / 10000); // half a cent rounds up
++  const tax = Math.round((subtotal / 100) * taxRate * 100);
+   return { subtotal: fromCents(subtotal), tax: fromCents(tax), total: fromCents(subtotal + tax) };
+ }
