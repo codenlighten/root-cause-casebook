@@ -61,6 +61,10 @@ Each case lives in `cases/NN-name/` with `README.md` (the write-up), `broken/` a
 
 `./run-all.sh` repeats all of these on every run, so the table above is re-checked, not remembered.
 
+## Independent re-check
+
+On 2026-11-25 the repository was cloned fresh onto a second Linux machine (Python 3.14.4, Node 22.23, Go 1.22.5, Rust 1.98.1, SQLite 3.46.1) and `./run-all.sh` ended with every case behaving as claimed: the broken state fails, the fix passes and the partly reverted fix fails again. That run found one flaw in the casebook itself: case 07 reused another state's build when `CARGO_TARGET_DIR` was set globally, so the fixed copy failed too. Its build directory is now local to each state.
+
 ## Limits
 
 - These are small, self-contained reductions. They show method, not the effort of tracing a bug through a large system, a database in use, or a distributed deployment.
