@@ -26,11 +26,11 @@ The sends were started inside `forEach(async ...)` and never awaited, so the fun
 
 ## Fix
 
-`Promise.allSettled(users.map(send))`, then report each rejection with the user it belongs to. One failure no longer stops the other sends, and none is silently dropped.
+`Promise.allSettled(users.map(async (user) => send(user)))`, then report each rejection with the user it belongs to. The `async` wrapper matters: a sender that throws before returning a promise would otherwise escape `allSettled` and stop the remaining sends. One failure no longer stops the other sends, and none is silently dropped.
 
 ## Why the regression test would have caught it
 
-It awaits `notifyAll` with one sender that fails after a delay and asserts the failure list, the count and which users were delivered. The delay matters: a sender that fails synchronously can hide the bug. Deliberate break: replacing the await with a fire-and-forget loop that reports every send as fulfilled makes the test fail (empty failure list), matching the original symptom.
+It awaits `notifyAll` with one sender that fails after a delay and asserts the failure list, the count and which users were delivered. The delay matters: a sender that fails synchronously can hide the original bug. A second test covers that synchronous failure against the fix. Deliberate break: replacing the await with a fire-and-forget loop that reports every send as fulfilled makes the test fail (empty failure list), matching the original symptom.
 
 ## How to spot this class next time
 

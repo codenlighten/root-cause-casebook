@@ -67,6 +67,18 @@ Each case lives in `cases/NN-name/` with `README.md` (the write-up), `broken/` a
 
 On 2026-11-25 the repository was cloned fresh onto a second Linux machine (Python 3.14.4, Node 22.23, Go 1.22.5, Rust 1.98.1, SQLite 3.46.1) and `./run-all.sh` ended with every case behaving as claimed: the broken state fails, the fix passes and the partly reverted fix fails again. That run found one flaw in the casebook itself: case 07 reused another state's build when `CARGO_TARGET_DIR` was set globally, so the fixed copy failed too. Its build directory is now local to each state.
 
+## What a code review found
+
+An independent AI review (2026-11-26) found faults in my own fixes, which is worth showing in a casebook about root causes. Each behaviour fault got a test that failed first:
+
+| Case | What was still wrong in the "fixed" version |
+|---|---|
+| 02 | A price of 1.005 was still rounded the wrong way, and a tax rate of `NaN` produced `NaN` totals |
+| 05 | A sender that threw before returning a promise still stopped the remaining sends |
+| 06 | The single-query rewrite used an inner join, so orders without items vanished |
+| 08 | The write-up said the test data was written as escapes; it was not |
+| 09 | A type hint allowed users that cannot be cache keys |
+
 ## Limits
 
 - These are small, self-contained reductions. They show method, not the effort of tracing a bug through a large system, a database in use, or a distributed deployment.

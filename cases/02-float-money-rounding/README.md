@@ -27,7 +27,7 @@ Money was computed with binary floating point, which cannot represent most decim
 
 ## Fix
 
-Convert to integer cents and basis points on entry, do all arithmetic in integers (tax = `floor((cents * bps + 5000) / 10000)`), and divide by 100 only for presentation. Quantity and price are validated at the boundary with messages that say what is wrong.
+Convert to integer cents and basis points on entry, do all arithmetic in integers (tax = `floor((cents * bps + 5000) / 10000)`), and divide by 100 only for presentation. Quantity, price and tax rate are validated at the boundary with messages that say what is wrong. A price with a fraction of a cent (1.005) is refused: its double is slightly below the written value, so converting it would round the wrong way, which is this same bug at the front door.
 
 ## Why the regression test would have caught it
 

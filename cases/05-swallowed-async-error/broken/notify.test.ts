@@ -21,3 +21,17 @@ test("when everything succeeds nothing is reported as failed", async () => {
   const result = await notifyAll(["ann"], async () => {});
   assert.deepEqual(result, { sent: 1, failed: [] });
 });
+
+test("a sender that throws before returning a promise is reported too", async () => {
+  const attempted: string[] = [];
+  const send = (user: string): Promise<void> => {
+    attempted.push(user);
+    if (user === "bob") throw new Error("bad address");
+    return Promise.resolve();
+  };
+
+  const result = await notifyAll(["ann", "bob", "cy"], send);
+
+  assert.deepEqual(result, { sent: 2, failed: [{ user: "bob", reason: "bad address" }] });
+  assert.deepEqual(attempted, ["ann", "bob", "cy"]);
+});

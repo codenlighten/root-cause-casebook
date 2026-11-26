@@ -1,11 +1,11 @@
 diff -ru a/notify.ts b/notify.ts
 --- a/notify.ts
 +++ b/notify.ts
-@@ -1,7 +1,10 @@
- export interface NotifyResult { sent: number; failed: { user: string; reason: string }[] }
+@@ -2,7 +2,10 @@
  
  export async function notifyAll(users: string[], send: (user: string) => Promise<void>): Promise<NotifyResult> {
--  const outcomes = await Promise.allSettled(users.map((user) => send(user)));
+   // The async wrapper turns a throw that happens before any promise exists into a rejection as well.
+-  const outcomes = await Promise.allSettled(users.map(async (user) => send(user)));
 +  const outcomes = users.map((user) => {
 +    void send(user); // fire and forget
 +    return { status: "fulfilled", value: undefined } as PromiseSettledResult<void>;

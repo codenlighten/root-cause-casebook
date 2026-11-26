@@ -1,7 +1,8 @@
 export interface NotifyResult { sent: number; failed: { user: string; reason: string }[] }
 
 export async function notifyAll(users: string[], send: (user: string) => Promise<void>): Promise<NotifyResult> {
-  const outcomes = await Promise.allSettled(users.map((user) => send(user)));
+  // The async wrapper turns a throw that happens before any promise exists into a rejection as well.
+  const outcomes = await Promise.allSettled(users.map(async (user) => send(user)));
   const failed: NotifyResult["failed"] = [];
   outcomes.forEach((outcome, i) => {
     if (outcome.status === "rejected") {

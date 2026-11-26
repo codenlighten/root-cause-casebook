@@ -1,19 +1,19 @@
 """Caches the result of an expensive per-user lookup."""
 from collections import OrderedDict
-from typing import Callable
+from typing import Callable, Hashable
 
 
 class Resolver:
     MAX_ENTRIES = 1000
 
-    def __init__(self, fetch: Callable[[object, str], str]) -> None:
+    def __init__(self, fetch: Callable[[Hashable, str], str]) -> None:
         self._fetch = fetch
-        self._cache: OrderedDict[tuple[object, str], str] = OrderedDict()
+        self._cache: OrderedDict[tuple[Hashable, str], str] = OrderedDict()
 
     def __len__(self) -> int:
         return len(self._cache)
 
-    def lookup(self, user: object, query: str) -> str:
+    def lookup(self, user: Hashable, query: str) -> str:
         key = (user, query)
         if key in self._cache:
             self._cache.move_to_end(key)

@@ -33,7 +33,7 @@ An N+1 query pattern, with each of the per-order queries scanning the whole `ord
 
 ## Fix
 
-`schema.sql` adds `orders(customer_id, placed_at)` and `order_items(order_id)` indexes, and `app.py` loads orders and items in one join.
+`schema.sql` adds `orders(customer_id, placed_at)` and `order_items(order_id)` indexes, and `app.py` loads orders and items in one left join, so an order that has no items is still listed, as it was before the rewrite.
 
 ## Measured result
 
@@ -47,6 +47,8 @@ n=5 runs after one warm-up, same process, SQLite 3.46.1, Python 3.14.4, AMD Ryze
 Your numbers will differ; the ratio and the plans are the point. The timing is shown by `./run-case.sh 6` and is not asserted by the test, because timings are flaky in CI.
 
 ## Why the regression test would have caught it
+
+A test lists an order with no items: my first version of this fix used an inner join, which silently dropped it.
 
 It does not time anything. It asserts the two properties that cause the slowness: one `SELECT` per request, and no `SCAN` of a table in the query plan. Those are deterministic. Deliberate break: removing only the `order_items` index (keeping the join) fails the plan check (`SCAN i`), so the test guards the index and the query shape separately.
 

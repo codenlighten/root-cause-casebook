@@ -25,6 +25,12 @@ class OrdersWithItems(unittest.TestCase):
         self.assertEqual(len(result), 100)
         self.assertTrue(all(len(o["items"]) == 5 for o in result))
 
+    def test_an_order_with_no_items_is_still_listed(self):
+        self.addCleanup(self.conn.rollback)
+        self.conn.execute("INSERT INTO orders (id, customer_id, placed_at) VALUES (900001, 900, '2026-01-01')")
+        result = app.orders_with_items(self.conn, 900)
+        self.assertEqual(result, [{"id": 900001, "placed_at": "2026-01-01", "items": []}])
+
     def test_uses_one_statement_not_one_per_order(self):
         _, selects = self.run_traced()
         self.assertEqual(len(selects), 1, f"{len(selects)} SELECTs for one request")
