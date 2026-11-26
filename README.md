@@ -73,11 +73,11 @@ An independent AI review (2026-11-26) found faults in my own fixes, which is wor
 
 | Case | What was still wrong in the "fixed" version |
 |---|---|
-| 02 | A price of 1.005 was still rounded the wrong way, and a tax rate of `NaN` produced `NaN` totals |
+| 02 | A price of 1.005 was still rounded the wrong way, a tax rate of `NaN` produced `NaN` totals, and (found in a second review) very large amounts and very fine rates were silently inexact |
 | 05 | A sender that threw before returning a promise still stopped the remaining sends |
 | 06 | The single-query rewrite used an inner join, so orders without items vanished |
 | 08 | The write-up said the test data was written as escapes; it was not |
-| 09 | A type hint allowed users that cannot be cache keys |
+| 09 | The type hint invited users that cannot be cache keys (narrowed to `Hashable`, which a hint cannot enforce) |
 
 ## Limits
 

@@ -26,3 +26,12 @@ test("refuses a tax rate that is not a fraction between 0 and 1", () => {
     assert.throws(() => invoiceTotal([{ price: 6, qty: 1 }], rate), /tax rate/, String(rate));
   }
 });
+
+test("refuses amounts too large to count exactly in cents", () => {
+  assert.throws(() => invoiceTotal([{ price: 1e21, qty: 1 }], 0), /too large/);
+  assert.throws(() => invoiceTotal([{ price: 90_000_000_000_000, qty: 2 }], 0), /too large/);
+});
+
+test("refuses a tax rate finer than a basis point instead of rounding it away", () => {
+  assert.throws(() => invoiceTotal([{ price: 1000, qty: 1 }], 0.000049), /basis points/);
+});

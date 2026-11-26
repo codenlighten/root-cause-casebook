@@ -1,11 +1,11 @@
 diff -ru a/invoice.ts b/invoice.ts
 --- a/invoice.ts
 +++ b/invoice.ts
-@@ -18,6 +18,6 @@
-   }
-   const subtotal = items.reduce((sum, it) => sum + toCents(it.price) * it.qty, 0);
+@@ -25,6 +25,6 @@
+   const subtotal = items.reduce((sum, it) => exact(sum + toCents(it.price) * it.qty), 0);
    const bps = Math.round(taxRate * 10000);
--  const tax = Math.floor((subtotal * bps + 5000) / 10000); // half a cent rounds up
+   if (Math.abs(taxRate * 10000 - bps) > 1e-6) throw new RangeError("tax rate must be a whole number of basis points (0.0001)");
+-  const tax = Math.floor(exact(subtotal * bps + 5000) / 10000); // half a cent rounds up
 +  const tax = Math.round((subtotal / 100) * taxRate * 100);
    return { subtotal: fromCents(subtotal), tax: fromCents(tax), total: fromCents(subtotal + tax) };
  }
