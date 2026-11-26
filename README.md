@@ -1,5 +1,7 @@
 # Root-cause casebook
 
+[![CI](https://github.com/codenlighten/root-cause-casebook/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/codenlighten/root-cause-casebook/actions/workflows/ci.yml)
+
 Nine small bugs in five languages, each diagnosed from a user-style symptom to a root cause, fixed, and pinned by a minimal regression test. It shows how I find the cause of a bug instead of patching its symptom.
 
 > **Every case is a constructed example.** The bugs were written for this repository to teach and demonstrate a method. None is a real incident, a client report or a production system, and no case describes anyone's actual software.

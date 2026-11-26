@@ -14,6 +14,7 @@ jobs:
       - uses: actions/setup-go@v6
         with:
           go-version: "1.22"
+          cache: false  # no module dependencies, so there is nothing to cache
       - uses: dtolnay/rust-toolchain@stable
       - name: "Every case: broken fails, fix passes, partly reverted fix fails"
         run: ./run-all.sh
